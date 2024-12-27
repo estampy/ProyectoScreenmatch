@@ -14,6 +14,7 @@ public class Principal {
     private final String URL_BASE = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey=1284368";
     private ConvierteDatos conversor = new ConvierteDatos();
+    private List<DatosSerie> datosSeries = new ArrayList<>();
 
     public void muestraElMenu() {
         var opcion = -1;
@@ -21,7 +22,7 @@ public class Principal {
             var menu = """
                     1 - Buscar series 
                     2 - Buscar episodios
-                    3 - Mostrar series buscadas
+                    3 - Mostrar Series Buscadas
                                   
                     0 - Salir
                     """;
@@ -36,7 +37,9 @@ public class Principal {
                 case 2:
                     buscarEpisodioPorSerie();
                     break;
-
+                case 3:
+                    mostrarSeriesBuscadas();
+                    break;
                 case 0:
                     System.out.println("Cerrando la aplicación...");
                     break;
@@ -44,13 +47,13 @@ public class Principal {
                     System.out.println("Opción inválida");
             }
         }
-
     }
 
     private DatosSerie getDatosSerie() {
         System.out.println("Escribe el nombre de la serie que deseas buscar");
         var nombreSerie = teclado.nextLine();
-        var json = consumoApi.obtenerDatos(URL_BASE + nombreSerie.replace(" ", "+") + API_KEY);
+        var json = consumoApi.obtenerDatos(URL_BASE + nombreSerie
+                .replace(" ", "+") + API_KEY);
         System.out.println(json);
         DatosSerie datos = conversor.obtenerDatos(json, DatosSerie.class);
         return datos;
@@ -60,7 +63,8 @@ public class Principal {
         List<DatosTemporadas> temporadas = new ArrayList<>();
 
         for (int i = 1; i <= datosSerie.totalTemporadas(); i++) {
-            var json = consumoApi.obtenerDatos(URL_BASE + datosSerie.titulo().replace(" ", "+") + "&season=" + i + API_KEY);
+            var json = consumoApi.obtenerDatos(URL_BASE + datosSerie
+                    .titulo().replace(" ", "+") + "&season=" + i + API_KEY);
             DatosTemporadas datosTemporada = conversor.obtenerDatos(json, DatosTemporadas.class);
             temporadas.add(datosTemporada);
         }
@@ -68,9 +72,12 @@ public class Principal {
     }
     private void buscarSerieWeb() {
         DatosSerie datos = getDatosSerie();
+        datosSeries.add(datos);
         System.out.println(datos);
+
     }
 
-
+    private void mostrarSeriesBuscadas() {
+        datosSeries.forEach(System.out::println);
+    }
 }
-
