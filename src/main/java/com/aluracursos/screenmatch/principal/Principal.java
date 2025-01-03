@@ -32,6 +32,8 @@ public class Principal {
                     1 - Buscar series 
                     2 - Buscar episodios
                     3 - Mostrar Series Buscadas
+                    4 - Buscar Serie por titulo
+                    5 - Top 5 Mejores Series
                                   
                     0 - Salir
                     """;
@@ -48,6 +50,12 @@ public class Principal {
                     break;
                 case 3:
                     mostrarSeriesBuscadas();
+                    break;
+                case 4:
+                    buscarSeriesPorTitulo();
+                    break;
+                case 5:
+                    buscarTop5Series();
                     break;
                 case 0:
                     System.out.println("Cerrando la aplicación...");
@@ -94,12 +102,9 @@ public class Principal {
                     .collect(Collectors.toList());
             serieEncontrada.setEpisodios(episodios);
             repositorio.save(serieEncontrada);
-
         }
-
-
-
     }
+
     private void buscarSerieWeb() {
         DatosSerie datos = getDatosSerie();
         //datosSeries.add(datos);
@@ -115,5 +120,24 @@ public class Principal {
         series.stream().sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);
     }
+
+    private void buscarSeriesPorTitulo(){
+        System.out.println("Escriba la serie que desea buscar");
+        var nombreSerie = teclado.nextLine();
+
+        Optional<Serie> serieBuscada = repositorio.findByTituloContainsIgnoreCase(nombreSerie);
+
+        if (serieBuscada.isPresent()){
+            System.out.println("La serie buscada es: "+ serieBuscada.get());
+        }else{
+            System.out.println("Serie no encontrada");
+        }
+    }
+    private void buscarTop5Series(){
+        List<Serie> topSerie=repositorio.findTop5ByOrderByEvaluacionDesc();
+        topSerie.forEach(s-> System.out.println("Nombre: " + s.getTitulo() +"," + " Evaluacion: "
+        + s.getEvaluacion()));
+    }
+
 
 }
