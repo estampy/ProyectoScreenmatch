@@ -191,7 +191,7 @@ public class Principal {
             Serie serie = serieBuscada.get();
             List<Episodio> topEpisodio = repositorio.top5Episodios(serie);
             topEpisodio.forEach(e->System.out.printf("Serie: %s Episodio: %s Temporada: %s Evaluacion: %s\n",
-                    e.getSerie().getTitulo(), e.getNumeroEpisodio(), e.getTemporada(), e.getEvaluacion()));
+                    e.getSerie().getTitulo(), e.getTitulo(), e.getTemporada(), e.getEvaluacion()));
         }
     }
 }
