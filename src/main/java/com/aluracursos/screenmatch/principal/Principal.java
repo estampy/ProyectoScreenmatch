@@ -182,7 +182,7 @@ public class Principal {
         var nombreEpisodio = teclado.nextLine();
         List<Episodio> episodioEncontrado = repositorio.episodiosPorNombre(nombreEpisodio);
         episodioEncontrado.forEach(e->System.out.printf("Serie: %s Episodio: %s Temporada: %s Evaluacion: %s\n",
-                        e.getSerie().getTitulo(), e.getNumeroEpisodio(), e.getTemporada(), e.getEvaluacion()));
+                        e.getSerie().getTitulo(), e.getTitulo(), e.getTemporada(), e.getEvaluacion()));
     }
 
     private void buscarTop5Episodios(){
